@@ -12,11 +12,16 @@ class TranslationFile
     buffer = ''
     File.foreach(@input_file) do |line|
       if buffer.length + line.length > @character_limit
-        #TODO: when at the limit, try to save a part, but cut at the end of a sentence
         line_limit = @character_limit - buffer.length
         buffer << line[0...line_limit]
-        file_parts << buffer
-        buffer = line[line_limit..-1]
+        last_dot_position = buffer.rindex(/[.?!]/)
+        if last_dot_position
+          file_parts << buffer[0..last_dot_position]
+          buffer = buffer[last_dot_position+1..-1] + line[line_limit..-1]
+        else
+          file_parts << buffer
+          buffer = line[line_limit..-1]
+        end
       else
         buffer << line
       end
