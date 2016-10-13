@@ -1,7 +1,5 @@
 class Translator
-  def initialize(api_key, api_url)
-    @api_key = api_key
-    @api_url - api_url
+  def initialize
   end
 
   def translate(text, to_lang, from_lang=nil)
