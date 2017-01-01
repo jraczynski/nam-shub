@@ -4,18 +4,19 @@ require './lib/translation_file'
 
 describe TranslationFile do
   before do
-    @input_file = 'test/samples/input_file.txt'
-    @translation_file = TranslationFile.new(@input_file, 1000)
+    @input_text = File.read('test/samples/input_file.txt')
+    @translation_file = TranslationFile.new(@input_text)
   end
 
-  describe '#read_file' do
-    it 'splits text properly according to character limit' do
-      @translation_file.read_file
-
-      assert @translation_file.file_parts.all? { |part| part.length <= 1000 }
-      @translation_file.file_parts[1][-1].must_equal '.'
-      input_file_length = File.read(@input_file).length
-      @translation_file.file_parts.inject(0) { |sum , part| sum + part.length }.must_equal input_file_length
+  describe '#save_translation' do
+    it 'saves the translation properly' do
+      @translation_file.save_translation('Translated text', :en, :yandex)
+      proper_translations_data = {
+          en: {
+              yandex: 'Translated text'
+          }
+      }
+      @translation_file.translations.must_equal proper_translations_data
     end
   end
 end

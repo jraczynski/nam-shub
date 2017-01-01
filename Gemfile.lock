@@ -1,10 +1,17 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.5.0)
+      public_suffix (~> 2.0, >= 2.0.2)
     ansi (1.5.0)
     builder (3.2.2)
+    crack (0.4.3)
+      safe_yaml (~> 1.0.0)
+    docile (1.1.5)
+    hashdiff (0.3.2)
     httparty (0.14.0)
       multi_xml (>= 0.5.2)
+    json (1.8.3)
     minitest (5.9.0)
     minitest-reporters (1.1.11)
       ansi
@@ -12,7 +19,19 @@ GEM
       minitest (>= 5.0)
       ruby-progressbar
     multi_xml (0.5.5)
+    public_suffix (2.0.4)
     ruby-progressbar (1.8.1)
+    safe_yaml (1.0.4)
+    simplecov (0.12.0)
+      docile (~> 1.1.0)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.0)
+    vcr (3.0.3)
+    webmock (2.3.1)
+      addressable (>= 2.3.6)
+      crack (>= 0.3.2)
+      hashdiff
 
 PLATFORMS
   ruby
@@ -20,6 +39,9 @@ PLATFORMS
 DEPENDENCIES
   httparty
   minitest-reporters
+  simplecov
+  vcr
+  webmock
 
 BUNDLED WITH
    1.12.5

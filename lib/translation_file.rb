@@ -1,33 +1,16 @@
 class TranslationFile
-  attr_accessor :file_parts
+  attr_reader :input_text, :translations
 
-  def initialize(input_file, character_limit=10_000)
-    raise 'File not found!' unless File.exists? input_file
-    @input_file = input_file
-    @character_limit = character_limit
-    @file_parts = []
+  def initialize(input_text, options={})
+    @input_text = input_text
+    @translations = {}
+    # TODO: save from_lang somehow, it will be needed for reverse translation
+    # TODO: remove reader for translations, and prepare methods for getting translations for specific lang and service?
+    # in many combinations, eg. get all translations for single lang, or all translations for single service etc.
   end
 
-  def read_file
-    buffer = ''
-    File.foreach(@input_file) do |line|
-      if buffer.length + line.length > @character_limit
-        line_limit = @character_limit - buffer.length
-        buffer << line[0...line_limit]
-        last_dot_position = buffer.rindex(/[.?!]/)
-        if last_dot_position
-          file_parts << buffer[0..last_dot_position]
-          buffer = buffer[last_dot_position+1..-1] + line[line_limit..-1]
-        else
-          file_parts << buffer
-          buffer = line[line_limit..-1]
-        end
-      else
-        buffer << line
-      end
-    end
-    if buffer.length
-      file_parts << buffer
-    end
+  def save_translation(translated_text, to_lang, translation_service)
+    @translations[to_lang] ||= {}
+    @translations[to_lang][translation_service] = translated_text
   end
 end
