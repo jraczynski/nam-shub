@@ -1,6 +1,5 @@
 ---
-  api_url: https://translate.yandex.net/api/v1.5/tr.json/
-  api_key: trnsl.1.1.XXXXXXXXXXXXXXXXX
+  api_key: insert-your-key-here
   character_limit: 10000
   languages:
     - en

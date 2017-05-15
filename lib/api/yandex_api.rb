@@ -2,14 +2,14 @@ require 'httparty'
 
 class YandexAPI
   include HTTParty
-  base_uri 'https://translate.yandex.net/api/v1.5/tr.json' #TODO: base URI from config?
+  base_uri 'https://translate.yandex.net/api/v1.5/tr.json'
 
-  attr_reader :character_limit
+  attr_reader :character_limit, :supported_languages
 
   def initialize(config)
     @api_key = config['api_key']
     @character_limit = config['character_limit']
-    #TODO: other parameters
+    @supported_languages = config['languages'].map(&:to_sym)
   end
 
   def translate(text, to_lang, from_lang=nil)
@@ -22,6 +22,10 @@ class YandexAPI
         }
     }
     response = self.class.post('/translate', options)
-    response['text'][0]
+    if response['text']
+      response['text']
+    else
+      raise response['message']
+    end
   end
 end

@@ -18,11 +18,8 @@ class Translator
   end
 
   def translate(service_name, text, to_lang, from_lang=nil)
-    if @services[service_name]
-      api = @services[service_name]
-    else
-      raise 'Unsupported translation service.'
-    end
+    api = get_service(service_name)
+
     if api.character_limit # or do it by default to have smaller requests? eg. 10_000
       text_parts = split_text(text, api.character_limit)
       translated_text_parts = text_parts.map do |part|
@@ -34,7 +31,27 @@ class Translator
     end
   end
 
+  def translate_to_all_supported_languages(service_name, text, from_lang=nil)
+    api = get_service(service_name)
+    translations = {}
+
+    languages = from_lang ? api.supported_languages.reject { |lang| lang == from_lang } : api.supported_languages
+    languages.each do |lang|
+      translations[lang] = translate(service_name, text, lang.to_sym, from_lang)
+    end
+
+    translations
+  end
+
   private
+
+  def get_service(service_name)
+    if @services[service_name]
+      @services[service_name]
+    else
+      raise 'Unsupported translation service.'
+    end
+  end
 
   def split_text(text, character_limit=10_000)
     # TODO: simple string splitting instead of each_line? like each_part

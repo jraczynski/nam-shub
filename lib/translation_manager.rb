@@ -9,11 +9,34 @@ class TranslationManager
     @translator = Translator.new
   end
 
-  # TODO: translate to all supported languages through all supported apis?
   def simple_translation(to_lang, translation_service)
-    translated_text = @translator.translate(translation_service, @translation_file.input_text, to_lang)
-    @translation_file.save_translation(translated_text, to_lang, translation_service)
-    save_to_file(translated_text, "#{to_lang}_#{translation_service}")
+    translation = @translator.translate(translation_service, @translation_file.input_text, to_lang)
+    @translation_file.save_translation(translation, to_lang, translation_service)
+    save_to_file(translation, "#{to_lang}_#{translation_service}")
+  end
+
+  # TODO: from_lang won't be needed if a proper response is constructed from translator: (from, to, text)
+  def reversed_translation(from_lang, inter_lang, translation_service)
+    translation = @translator.translate(translation_service, @translation_file.input_text, inter_lang, from_lang)
+    doubled_translation = @translator.translate(translation_service, translation, from_lang, inter_lang)
+    save_to_file(doubled_translation, "reversed_#{inter_lang}_#{translation_service}")
+  end
+
+  def translate_to_all_languages_with(translation_service)
+    translations = @translator.translate_to_all_supported_languages(translation_service, @translation_file.input_text)
+    translations.each do |lang, translation|
+      @translation_file.save_translation(translation, lang, translation_service)
+      save_to_file(translation, "#{lang}_#{translation_service}")
+    end
+  end
+
+  def reverse_translate_to_all_languages_with(translation_service, from_lang)
+    translations = @translator.translate_to_all_supported_languages(translation_service, @translation_file.input_text, from_lang)
+    translations.each do |lang, translation|
+      @translation_file.save_translation(translation, lang, translation_service)
+      doubled_translation = @translator.translate(translation_service, translation, from_lang, lang)
+      save_to_file(doubled_translation, "reversed_#{lang}_#{translation_service}")
+    end
   end
 
   private
@@ -29,7 +52,7 @@ class TranslationManager
   def save_to_file(text, postfix)
     file_name = File.basename(@input_file, '.*')
     file_path = File.dirname(@input_file)
-    File.open("#{file_path}/#{file_name}_#{postfix}.txt", 'w') {|f| f.write(text) }
+    File.open("#{file_path}/#{file_name} (#{postfix}).txt", 'w') {|f| f.write(text) }
   end
 
 end
