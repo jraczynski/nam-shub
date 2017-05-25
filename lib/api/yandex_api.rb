@@ -23,6 +23,11 @@ class YandexAPI
     }
     response = self.class.post('/translate', options)
     if response['text']
+      # {
+      #   from: from_lang || response['lang'][0..1].to_sym,
+      #   to: to_lang,
+      #   text: response['text'][0]
+      # }
       response['text']
     else
       raise response['message']
