@@ -28,7 +28,7 @@ class YandexAPI
       #   to: to_lang,
       #   text: response['text'][0]
       # }
-      response['text']
+      response['text'].first
     else
       raise response['message']
     end
