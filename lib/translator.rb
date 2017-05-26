@@ -1,7 +1,8 @@
+require './lib/api/transltr_api'
 require './lib/api/yandex_api'
 
 # TODO: scan config folder, add and load all services automatically?
-SUPPORTED_SERVICES = [:yandex]
+SUPPORTED_SERVICES = [:transltr, :yandex]
 
 class Translator
   def initialize
@@ -9,6 +10,8 @@ class Translator
     SUPPORTED_SERVICES.each do |service_name|
       config = load_config service_name
       case service_name
+        when :transltr
+          @services[:transltr] = TransltrAPI.new(config)
         when :yandex
           @services[:yandex] = YandexAPI.new(config)
         else
