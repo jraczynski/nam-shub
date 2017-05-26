@@ -7,9 +7,9 @@ class Translator
   def initialize
     @services = {}
     SUPPORTED_SERVICES.each do |service_name|
+      config = load_config service_name
       case service_name
         when :yandex
-          config = YAML.load_file './config/yandex.yml'
           @services[:yandex] = YandexAPI.new(config)
         else
           # do nothing
@@ -50,6 +50,14 @@ class Translator
       @services[service_name]
     else
       raise 'Unsupported translation service.'
+    end
+  end
+
+  def load_config(service_name)
+    begin
+      YAML.load_file "./config/#{service_name}.yml"
+    rescue
+      raise "Create config file! - #{service_name}.yml"
     end
   end
 
