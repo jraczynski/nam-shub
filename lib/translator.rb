@@ -28,7 +28,8 @@ class Translator
 
     if api.character_limit # or do it by default to have smaller requests? eg. 10_000
       text_parts = split_text(text, api.character_limit)
-      translated_text_parts = text_parts.map do |part|
+      translated_text_parts = text_parts.each_with_index.map do |part, index|
+        p "Translating part #{index+1} of #{text_parts.count} (#{from_lang}->#{to_lang})"
         api.translate(part, to_lang, from_lang)
       end
       translated_text_parts.join

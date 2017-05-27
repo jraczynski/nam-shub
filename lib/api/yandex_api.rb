@@ -2,6 +2,7 @@ require 'httparty'
 
 class YandexAPI
   include HTTParty
+  default_options.update(verify: false) # OpenSSL for Windows
   base_uri 'https://translate.yandex.net/api/v1.5/tr.json'
 
   attr_reader :character_limit, :supported_languages

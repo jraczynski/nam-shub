@@ -1,6 +1,6 @@
 ---
   api_key: none
-  character_limit: 10000
+  character_limit: 5000
   languages:
     - en
     - pl
