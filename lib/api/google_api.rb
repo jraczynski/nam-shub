@@ -1,5 +1,4 @@
 require 'tr4n5l4te'
-require 'pry'
 
 class GoogleAPI
   attr_reader :character_limit, :supported_languages
