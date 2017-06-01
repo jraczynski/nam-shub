@@ -14,5 +14,11 @@ describe GoogleAPI do
         @google_api.translate('krowa', 'en', 'pl').must_equal 'cow'
       end
     end
+
+    it 'should translate a text with line breaks from polish to english' do
+      VCR.use_cassette('google_api') do
+        @google_api.translate('krowa \n pies', 'en', 'pl').must_equal 'cow \n pies'
+      end
+    end
   end
 end
